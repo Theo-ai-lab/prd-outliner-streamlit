@@ -172,4 +172,4 @@ if gen_btn:
 
             # Prompt preview (debug) inside an expander
             with st.expander("Show prompt (debug)"):
-                st.code(prompt, language="markdown
+                st.code(prompt, language="markdown")
