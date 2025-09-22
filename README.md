@@ -3,6 +3,7 @@
 **Stack:** Python · Streamlit · OpenAI API (GPT-4o-mini)
 
 ## Demo
+https://prd-outliner-app-ze5wqndgymjf9knsfuwywz.streamlit.app/
 (Screenshot/GIF coming)
 
 ## How it works
