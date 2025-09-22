@@ -77,8 +77,7 @@ sections = st.multiselect(
         "Open Questions",
         "Launch Plan",
         "Requirements",
-    ],
-)
+),
     default=[
         "Context",
 @@ -70,71 +75,94 @@
