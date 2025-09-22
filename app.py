@@ -1,4 +1,3 @@
-# app.py
 import os
 import json
 import textwrap
@@ -6,6 +5,7 @@ import html
 import streamlit as st
 import streamlit.components.v1 as components
 from openai import OpenAI
+from streamlit_extras.copy_to_clipboard import copy_to_clipboard
 
 # ── OpenAI client (read key from Streamlit Secrets, or env if running locally)
 def get_client() -> OpenAI:
@@ -92,7 +92,7 @@ def build_prompt(problem_text: str, goal_text: str, selected_sections: list[str]
         - Keep each section short (bullets welcome).
         - Write in **Markdown** with clear headers (`##`).
         - For **Success Metrics**, include **quantitative** examples.
-        - For **User Stories**, include 3–6 well-formed stories (“As a … I want … so that …”).
+        - For **User Stories**, include 3–6 well-formed stories ("As a … I want … so that …").
         - For **Scope (In/Out)**, list crisp bullets.
         - If something is unknown, add it under **Open Questions**.
 
@@ -102,19 +102,37 @@ def build_prompt(problem_text: str, goal_text: str, selected_sections: list[str]
 def call_openai(markdown_prompt: str, model_name: str, temp: float) -> str:
     client = get_client()
     try:
-        resp = client.responses.create(
+        resp = client.chat.completions.create(
             model=model_name,
             temperature=temp,
-            input=[
+            messages=[
                 {"role": "system",
                  "content": "You write crisp, actionable PRD outlines that are easy to copy into docs."},
                 {"role": "user", "content": markdown_prompt},
             ],
         )
-        # New SDK: use output_text if present; else fallback
-        return getattr(resp, "output_text", "").strip() or str(resp)
+        return resp.choices[0].message.content.strip()
     except Exception as e:
         raise RuntimeError(f"OpenAI error: {e}")
+
+# --- Actions (download + copy) ---
+def render_actions(md_text: str) -> None:
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        st.download_button(
+            "Download Markdown",
+            md_text,
+            file_name="prd_outline.md",
+            mime="text/markdown",
+        )
+    with col2:
+        # copy_to_clipboard renders a working button and triggers a toast
+        try:
+            copy_to_clipboard(md_text, "Copied Markdown to clipboard!")
+        except Exception:
+            # Fallback if the component isn't available for any reason
+            st.code(md_text, language="markdown")
+            st.info("Select the markdown above and press ⌘/Ctrl+C to copy.")
 
 # ── Action
 if gen_btn:
@@ -135,33 +153,7 @@ if gen_btn:
         else:
             st.success("Done! PRD outline generated.")
             st.markdown(md)
-
-            # Download Markdown
-            st.download_button(
-                "Download Markdown",
-                md,
-                file_name="prd_outline.md",
-                mime="text/markdown",
-                use_container_width=False,
-            )
-
-            # Copy to clipboard (works in Streamlit Cloud using a tiny JS snippet)
-            if st.button("Copy to clipboard", type="secondary"):
-                # escape + JSON-encode to safely inject into <script>
-                encoded = json.dumps(md)
-                components.html(
-                    f"""
-                    <script>
-                      const txt = {encoded};
-                      navigator.clipboard.writeText(txt).then(
-                        () => {{ window.parent.postMessage({{"stToast":"copied"}}, "*"); }},
-                        () => {{ window.parent.postMessage({{"stToast":"failed"}}, "*"); }}
-                      );
-                    </script>
-                    """,
-                    height=0,
-                )
-                st.toast("Copied outline to clipboard ✅", icon="✅")
+            render_actions(md)
 
             # Prompt preview (debug) inside an expander
             with st.expander("Show prompt (debug)"):
