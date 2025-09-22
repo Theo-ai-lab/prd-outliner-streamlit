@@ -102,17 +102,16 @@ def build_prompt(problem_text: str, goal_text: str, selected_sections: list[str]
 def call_openai(markdown_prompt: str, model_name: str, temp: float) -> str:
     client = get_client()
     try:
-        resp = client.responses.create(
+        resp = client.chat.completions.create(
             model=model_name,
             temperature=temp,
-            input=[
+            messages=[
                 {"role": "system",
                  "content": "You write crisp, actionable PRD outlines that are easy to copy into docs."},
                 {"role": "user", "content": markdown_prompt},
             ],
         )
-        # New SDK: use output_text if present; else fallback
-        return getattr(resp, "output_text", "").strip() or str(resp)
+        return resp.choices[0].message.content.strip()
     except Exception as e:
         raise RuntimeError(f"OpenAI error: {e}")
 
@@ -132,22 +131,8 @@ def render_actions(md_text: str) -> None:
             copy_to_clipboard(md_text, "Copied Markdown to clipboard!")
         except Exception:
             # Fallback if the component isn't available for any reason
-            if st.button("Copy to clipboard", type="secondary"):
-                # escape + JSON-encode to safely inject into <script>
-                encoded = json.dumps(md_text)
-                components.html(
-                    f"""
-                    <script>
-                      const txt = {encoded};
-                      navigator.clipboard.writeText(txt).then(
-                        () => {{ window.parent.postMessage({{"stToast":"copied"}}, "*"); }},
-                        () => {{ window.parent.postMessage({{"stToast":"failed"}}, "*"); }}
-                      );
-                    </script>
-                    """,
-                    height=0,
-                )
-                st.toast("Copied outline to clipboard ✅", icon="✅")
+            st.code(md_text, language="markdown")
+            st.info("Select the markdown above and press ⌘/Ctrl+C to copy.")
 
 # ── Action
 if gen_btn:
