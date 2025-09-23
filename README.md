@@ -1,4 +1,4 @@
-# PRD Outliner (OpenAI + Streamlit)
+# PRD Outliner (MVP) – OpenAI + Streamlit
 
 Prototype to streamline PRD drafting: paste a short problem + goal → generate a structured PRD outline in under 2 minutes.
 
@@ -21,7 +21,7 @@ Prototype to streamline PRD drafting: paste a short problem + goal → generate 
 
 # Results (v0.1)
 - Protocol: 8 internal runs across varied inputs (short/long, both `gpt-4o-mini` and `gpt-4o`).
-- Outcome: 7 / 8 runs (87.5%) produced usable PRD outlines (structured, no prefatory text).
+- Outcome: 7/8 runs (87.5%) produced structured, usable PRD outlines.
 - Failure mode: repeated headers and truncation on very long inputs.
 - Fixes applied: tightened prompt to suppress prefatory text; added spinner + input length hint.
 
@@ -37,14 +37,14 @@ mkdir -p .streamlit && printf "OPENAI_API_KEY = \"sk-...\"\n" > .streamlit/secre
 streamlit run app.py
 
 # Docs
-- PRD (view-only): [Notion Link](https://www.notion.so/your-prd-link)
-- 4-week roadmap: [Notion Link](https://www.notion.so/your-roadmap-link)
-- Portfolio hub: [Notion Link](https://www.notion.so/your-portfolio-hub)
+- [PRD (view-only)](https://www.notion.so/your-prd-link)
+- [4-week roadmap](https://www.notion.so/your-roadmap-link)
+- [Portfolio hub](https://www.notion.so/your-portfolio-hub)
 
 # Changelog
-- 2025-09-22: Init public repo
-- 2025-09-22: Added input validation (Problem/Goal required)
-- 2025-09-22: Added “Copy to Clipboard” button
-- 2025-09-22: Added “Show Prompt (debug)” expander
-- 2025-09-22: Uploaded screenshots (hero.png, result.png) → added to README Demo
+- 2025-09-17: Init public repo
+- 2025-09-18: Added input validation (Problem/Goal required)
+- 2025-09-19: Added “Copy to Clipboard” button
+- 2025-09-20: Added “Show Prompt (debug)” expander
+- 2025-09-21: Uploaded screenshots (hero.png, result.png) → added to README Demo
 - 2025-09-22: Polished README (Results v0.1, Docs links placeholders)
