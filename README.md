@@ -42,4 +42,9 @@ streamlit run app.py
 - Portfolio hub: [Notion Link](https://www.notion.so/your-portfolio-hub)
 
 # Changelog
-- 2025-09-22: init public repo
+- 2025-09-22: Init public repo
+- 2025-09-22: Added input validation (Problem/Goal required)
+- 2025-09-22: Added “Copy to Clipboard” button
+- 2025-09-22: Added “Show Prompt (debug)” expander
+- 2025-09-22: Uploaded screenshots (hero.png, result.png) → added to README Demo
+- 2025-09-22: Polished README (Results v0.1, Docs links placeholders)
