@@ -20,11 +20,10 @@ Prototype to streamline PRD drafting: paste a short problem + goal → generate 
 ---
 
 # Results (v0.1)
-- Protocol: 8 internal runs (varied inputs; both `gpt-4o-mini` and `gpt-4o`)  
-- Score: 7 / 8 usable outlines (87.5%)  
-- Notes / fixes planned:  
-  1) Occasionally repeats headings → fixed with tighter prompt.  
-  2) Long inputs slowed response → added spinner + input length hint.  
+- Protocol: 8 internal runs across varied inputs (short/long, both `gpt-4o-mini` and `gpt-4o`).
+- Outcome: 7 / 8 runs (87.5%) produced usable PRD outlines (structured, no prefatory text).
+- Failure mode: repeated headers and truncation on very long inputs.
+- Fixes applied: tightened prompt to suppress prefatory text; added spinner + input length hint.
 
 ---
 
@@ -38,9 +37,9 @@ mkdir -p .streamlit && printf "OPENAI_API_KEY = \"sk-...\"\n" > .streamlit/secre
 streamlit run app.py
 
 # Docs
-- PRD (view-only): <PASTE_LINK_TO_PRD_OUTLINER_PRD>
-- 4-week roadmap: <PASTE_LINK_TO_PRD_OUTLINER_ROADMAP>
-- Portfolio hub: <PASTE_LINK_TO_NOTION_PORTFOLIO>
+- PRD (view-only): [Notion Link](https://www.notion.so/your-prd-link)
+- 4-week roadmap: [Notion Link](https://www.notion.so/your-roadmap-link)
+- Portfolio hub: [Notion Link](https://www.notion.so/your-portfolio-hub)
 
 # Changelog
 - 2025-09-22: init public repo
